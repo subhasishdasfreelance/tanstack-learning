@@ -1,10 +1,5 @@
-import { Elysia } from 'elysia'
-
 import { createFileRoute } from '@tanstack/react-router'
-
-const app = new Elysia({
-  prefix: '/api',
-}).get('/', 'Hello Elysia!')
+import { app } from '@/server/app'
 
 const handle = ({ request }: { request: Request }) => app.fetch(request)
 
