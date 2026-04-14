@@ -26,6 +26,17 @@
         "showReuseMessage": false,
         "clear": false
       }
+    },
+    {
+      "label": "force safepush",
+      "type": "shell",
+      "command": "git push --force-with-lease",
+      "presentation": {
+        "reveal": "never",
+        "panel": "shared",
+        "showReuseMessage": false,
+        "clear": false
+      }
     }
   ]
 }
