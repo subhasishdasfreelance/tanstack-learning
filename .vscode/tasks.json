@@ -19,7 +19,7 @@
     {
       "label": "squash last wip commits",
       "type": "shell",
-      "command": "N=$(git log --pretty=format:%s | awk '/^wip/{c++} !/^wip{exit} END{print c+0}'); if [ \"$N\" -eq 0 ]; then echo \"No consecutive wip commits\"; exit 0; fi; git reset --soft HEAD~$N && echo \"Squashed $N wip commits. Ready to commit.\"",
+      "command": "N=$(git log --pretty=format:%s | awk '{ if (tolower($0) ~ /^wip/) c++; else exit } END { print c+0 }'); if [ \"$N\" -eq 0 ]; then echo \"No consecutive wip commits\"; exit 0; fi; echo \"Found $N wip commits\"; git reset --soft HEAD~$N",
       "presentation": {
         "reveal": "never",
         "panel": "shared",
@@ -29,4 +29,3 @@
     }
   ]
 }
-// N=$(git log --grep="^wip" --pretty=format:%H | wc -l) && git reset --soft HEAD~$N && git commit -m "chore: squash wip"
