@@ -1,5 +1,5 @@
+import { eden } from '#/client/eden'
 import { queryOptions } from '@tanstack/react-query'
-import { eden } from '@/lib/eden'
 
 export const userKeys = {
   all: ['users'] as const,

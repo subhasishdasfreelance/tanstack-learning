@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import { app } from '@/server/app'
+import { app } from '#/server'
 
 const handle = ({ request }: { request: Request }) => app.fetch(request)
 
