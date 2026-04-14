@@ -6,7 +6,6 @@ export const getEden = createIsomorphicFn()
   .server(() => treaty(app).api)
   .client(() => treaty<typeof app>('localhost:3000').api)
 
-// 👇 proxy here
 export const eden = new Proxy({} as ReturnType<typeof getEden>, {
   get(_, key) {
     const api = getEden()
