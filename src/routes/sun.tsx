@@ -1,19 +1,21 @@
-import { getUsers } from '#/features/user/queries'
+import { useUsers } from '#/features/user/api'
 import { createFileRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
 
 export const Route = createFileRoute('/sun')({
   component: RouteComponent,
 })
 
 function RouteComponent() {
-  useEffect(() => {
-    ;(async () => {
-      const users = await getUsers()
+  // useEffect(() => {
+  //   ;(async () => {
+  //     const users = await getUsers()
 
-      console.log('users', users.data?.[0].name)
-    })()
-  }, [])
+  //     console.log('users', users.data?.[0].name)
+  //   })()
+  // }, [])
+  const users = useUsers()
+
+  console.log('users', users.data?.[0].name)
 
   return <div>Hello "/sun"!</div>
 }
