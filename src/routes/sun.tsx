@@ -10,5 +10,5 @@ function RouteComponent() {
 
   console.log('users', users.data)
 
-  return <div>Hello "/sun"!</div>
+  return <div>Hello another route!!</div>
 }
