@@ -34,8 +34,8 @@ export const userApi = new Elysia({ prefix: '/users' })
       const result = await users.insertOne(body)
 
       return {
-        _id: result.insertedId.toString(),
         ...body,
+        _id: result.insertedId.toString(),
       }
     },
     {
