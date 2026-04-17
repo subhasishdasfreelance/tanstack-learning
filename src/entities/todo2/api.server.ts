@@ -1,26 +1,10 @@
-import type { Static } from 'elysia'
+import {
+  CreateTodoSchema,
+  todos,
+  TodoSchema,
+} from '#/entities/todo/model.server'
+import { withStringId } from '#/shared/lib/db'
 import { Elysia, t } from 'elysia'
-import type { ObjectId, OptionalId } from 'mongodb'
-import { db, withStringId } from '../db'
-
-const TodoSchema = t.Object(
-  {
-    _id: t.String(),
-    text: t.String(),
-    isComplete: t.Boolean(),
-    createdAt: t.Number(),
-    updatedAt: t.Number(),
-  },
-  { additionalProperties: false },
-)
-
-const CreateTodoSchema = t.Object({
-  text: t.String(),
-})
-
-type TodoDB = Omit<Static<typeof TodoSchema>, '_id'> & { _id: ObjectId }
-
-const todos = db.collection<OptionalId<TodoDB>>('todos')
 
 export const todoApi = new Elysia({ prefix: '/todos' })
   .get(

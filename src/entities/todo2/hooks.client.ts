@@ -1,4 +1,4 @@
-import { todoKeys, todosApi } from '#/client/entities/todo/api'
+import { todoKeys, todosApi } from '#/entities/todo/api.client'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 
 export const useTodos = () => {

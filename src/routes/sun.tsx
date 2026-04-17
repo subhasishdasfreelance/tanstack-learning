@@ -1,26 +1,43 @@
-import { useCreateTodo } from '#/client/entities/todo/hooks'
-import { useCreateUser, useUsers } from '#/client/entities/user/hooks'
+// src/routes/users.tsx
+import { todoQueries, useTodos } from '#/entities/restaurant/data'
+import { queryClient } from '#/integrations/tanstack-query/query-client'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/sun')({
-  component: RouteComponent,
+  loader: async () => {
+    await queryClient.ensureQueryData(todoQueries.list())
+  },
+  component: UsersPage,
 })
 
-function RouteComponent() {
-  const { data } = useUsers()
-  const { mutate: createUser, isPending: isCreateUserLoading } = useCreateUser()
-  const { mutate: createTodo, isPending: isCreateTodoLoading } = useCreateTodo()
+function UsersPage() {
+  // const { data: users, isLoading } = userHooks.useUsers()
+  // const createUser = userHooks.useCreateUser()
 
-  // console.log('users', users.data?.[0].name)
+  const { data } = useTodos()
+
+  // if (isLoading) return <div>Loading...</div>
 
   return (
     <div>
-      Hello another route!!
-      {data?.[0]._id}
-      <button onClick={() => createUser({ name: 'Sun' })}>createUser</button>
-      <button onClick={() => createTodo({ text: 'sample todo' })}>
-        createTodo
-      </button>
+      <h1>Users</h1>
+
+      {/* {users?.map((u) => (
+        <div key={u.id}>{u.name}</div>
+      ))} */}
+
+      {/* <button
+        onClick={() =>
+          createUser.mutate({ data: { email: 'sfd', name: 'sdfj' } })
+        }
+      >
+        Add User
+      </button> */}
+
+      <p>---------client hook todos-----------</p>
+      {data?.map((item) => (
+        <p key={item._id}>{item.text}</p>
+      ))}
     </div>
   )
 }

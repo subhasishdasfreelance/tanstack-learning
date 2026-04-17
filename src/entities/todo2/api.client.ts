@@ -1,4 +1,4 @@
-import { eden } from '#/client/eden'
+import { eden } from '#/shared/lib/eden'
 import { queryOptions } from '@tanstack/react-query'
 
 export const todoKeys = {
