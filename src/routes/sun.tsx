@@ -1,11 +1,11 @@
 // src/routes/users.tsx
-import { todoQueries, useTodos } from '#/entities/restaurant/data'
-import { queryClient } from '#/integrations/tanstack-query/query-client'
+import { useTodos } from '#/entities/todo/data'
+import { getAllTodosFn } from '#/entities/todo/server'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/sun')({
   loader: async () => {
-    await queryClient.ensureQueryData(todoQueries.list())
+    return getAllTodosFn()
   },
   component: UsersPage,
 })
@@ -13,6 +13,7 @@ export const Route = createFileRoute('/sun')({
 function UsersPage() {
   // const { data: users, isLoading } = userHooks.useUsers()
   // const createUser = userHooks.useCreateUser()
+  const serverTodos = Route.useLoaderData()
 
   const { data } = useTodos()
 
@@ -34,6 +35,10 @@ function UsersPage() {
         Add User
       </button> */}
 
+      <p>---------server hook todos-----------</p>
+      {serverTodos.map((item) => (
+        <p key={item._id}>{item.text}</p>
+      ))}
       <p>---------client hook todos-----------</p>
       {data?.map((item) => (
         <p key={item._id}>{item.text}</p>

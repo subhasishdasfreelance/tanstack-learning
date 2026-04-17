@@ -1,4 +1,4 @@
-import { createTodoFn, getAllTodosFn } from '#/entities/restaurant/server'
+import { createTodoFn, getAllTodosFn } from '#/entities/todo/server'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 
 export const keys = {
