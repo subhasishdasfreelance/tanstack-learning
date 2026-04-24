@@ -1,6 +1,6 @@
 // src/routes/users.tsx
-import { useTodos } from '#/entities/todo/data'
-import { getAllTodosFn } from '#/entities/todo/server'
+import { getAllTodosFn } from '#/entities/todo/fns'
+import { useTodos } from '#/entities/todo/hooks'
 import { createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/sun')({
@@ -11,8 +11,6 @@ export const Route = createFileRoute('/sun')({
 })
 
 function UsersPage() {
-  // const { data: users, isLoading } = userHooks.useUsers()
-  // const createUser = userHooks.useCreateUser()
   const serverTodos = Route.useLoaderData()
 
   const { data } = useTodos()
@@ -22,18 +20,6 @@ function UsersPage() {
   return (
     <div>
       <h1>Users</h1>
-
-      {/* {users?.map((u) => (
-        <div key={u.id}>{u.name}</div>
-      ))} */}
-
-      {/* <button
-        onClick={() =>
-          createUser.mutate({ data: { email: 'sfd', name: 'sdfj' } })
-        }
-      >
-        Add User
-      </button> */}
 
       <p>---------server hook todos-----------</p>
       {serverTodos.map((item) => (

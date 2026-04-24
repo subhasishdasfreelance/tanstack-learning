@@ -3,7 +3,7 @@ import {
   todos,
   TodoSchema,
 } from '#/entities/todo/model.server'
-import { withStringId } from '#/shared/lib/db'
+import { withStringId } from '#/shared/lib/db.server'
 import { Elysia, t } from 'elysia'
 
 export const todoApi = new Elysia({ prefix: '/todos' })

@@ -1,4 +1,4 @@
-import { db } from '#/shared/lib/db'
+import { db } from '#/shared/lib/db.server'
 import type { Static } from 'elysia'
 import { t } from 'elysia'
 import type { ObjectId, OptionalId } from 'mongodb'

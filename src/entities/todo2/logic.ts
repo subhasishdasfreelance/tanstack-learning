@@ -1,4 +1,4 @@
-import { db } from '#/shared/lib/db'
+import { db } from '#/shared/lib/db.server'
 import type { ObjectId, OptionalId } from 'mongodb'
 import type { InferOutput } from 'valibot'
 import type { UserSchema } from './schema'

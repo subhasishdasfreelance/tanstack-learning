@@ -1,4 +1,4 @@
-import { db } from '#/shared/lib/db'
+import { db } from '#/shared/lib/db.server'
 import type { Collection, Document, ObjectId } from 'mongodb'
 
 export const withStringId = <T extends { _id: ObjectId }>(
