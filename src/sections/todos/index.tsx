@@ -1,11 +1,12 @@
 import { useTodos } from '#/entities/todo/hooks'
 import EmptyTodos from '#/sections/todos/EmptyTodos'
+import TodoList from '#/sections/todos/TodoList'
 import { Button } from '@heroui/react'
 import { Link } from '@tanstack/react-router'
 import { FiPlus } from 'react-icons/fi'
 
 export default function TodosPage() {
-  const { data: todos } = useTodos()
+  const { data: todos = [] } = useTodos()
   console.log('todos', todos)
 
   return (
@@ -21,9 +22,9 @@ export default function TodosPage() {
           </Button>
         </div>
 
-        <div className="mt-10">
-          {todos?.length === 0 && <EmptyTodos />}
-          {todos?.length !== 0 && <EmptyTodos />}
+        <div className="py-10">
+          {todos.length === 0 && <EmptyTodos />}
+          {todos.length !== 0 && <TodoList todos={todos} />}
         </div>
       </div>
     </div>

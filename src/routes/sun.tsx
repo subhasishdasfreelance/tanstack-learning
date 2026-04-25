@@ -21,8 +21,8 @@ function UsersPage() {
 
   return (
     <div>
-      <Button size='lg'>
-        <Link to="/new-todo">New Todo</Link>
+      <Button size="lg">
+        <Link to="/todos/new">New Todo</Link>
       </Button>
 
       {/* <p>---------server hook todos-----------</p>

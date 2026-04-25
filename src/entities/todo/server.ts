@@ -28,7 +28,12 @@ export const getTodosByBorough = async () => {
 }
 
 export const createTodo = async (data: { text: string }) => {
-  const res = await todoCollection.insertOne(data)
+  const res = await todoCollection.insertOne({
+    ...data,
+    completed: false,
+    createdAt: Date.now(),
+    updatedAt: Date.now(),
+  })
 
   return {
     ...data,
