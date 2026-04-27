@@ -1,6 +1,7 @@
 import type { Todo } from '#/entities/todo/schema'
 import { db } from '#/shared/lib/db.server'
-import type { OptionalId } from 'mongodb'
+import { ObjectId  } from 'mongodb'
+import type {OptionalId} from 'mongodb';
 
 const todoCollection = db.collection<OptionalId<Todo>>('todos')
 
@@ -27,16 +28,32 @@ export const getTodosByBorough = async () => {
   }))
 }
 
-export const createTodo = async (data: { text: string }) => {
+export const createTodo = async (text: string) => {
   const res = await todoCollection.insertOne({
-    ...data,
+    text,
     completed: false,
     createdAt: Date.now(),
     updatedAt: Date.now(),
   })
 
   return {
-    ...data,
+    text,
     _id: res.insertedId.toString(),
   }
+}
+
+export const toggleTodo = async (todoId: string) => {
+  const todo = await todoCollection.findOne({
+    _id: new ObjectId(todoId),
+  })
+
+  if (!todo) throw new Error('Todo not found')
+
+  await todoCollection.updateOne({ _id: new ObjectId(todoId) }, [
+    {
+      $set: {
+        completed: { $not: '$completed' },
+      },
+    },
+  ])
 }

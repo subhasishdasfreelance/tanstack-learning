@@ -11,8 +11,34 @@ const inititalState = {
 
 export default function CreateTodo() {
   const [st, setSt] = useMultiState(inititalState)
-  const { mutateTodo, status } = useCreateTodo()
+  const { createTodo, status } = useCreateTodo()
   const navigate = useNavigate()
+
+  const handleCreateTodo = () => {
+    toast.success(`Todo successfully added`, {
+      actionProps: {
+        children: 'Go to all todos',
+        className: 'bg-success text-white',
+        onPress: () => {
+          navigate({ to: '/todos' })
+          toast.clear()
+        },
+      },
+      description: `Added "${st.text}"`,
+    })
+    createTodo(
+      {
+        text: st.text,
+      },
+      {
+        // onSuccess
+        onError: (err) => {
+          const errMsg = getErrorMessage(err)
+          toast.danger(errMsg)
+        },
+      },
+    )
+  }
 
   return (
     <div className="bg-background py-4 min-h-screen">
@@ -32,35 +58,7 @@ export default function CreateTodo() {
           desc={!st.text && 'Please add verbs'}
         />
 
-        <Button
-          variant="primary"
-          className="mt-8"
-          onClick={() => {
-            toast.success(`Todo successfully added`, {
-              actionProps: {
-                children: 'Go to all todos',
-                className: 'bg-success text-white',
-                onPress: () => {
-                  navigate({ to: '/todos' })
-                  toast.clear()
-                },
-              },
-              description: `Added "${st.text}"`,
-            })
-            mutateTodo(
-              {
-                text: st.text,
-              },
-              {
-                // onSuccess
-                onError: (err) => {
-                  const errMsg = getErrorMessage(err)
-                  toast.danger(errMsg)
-                },
-              },
-            )
-          }}
-        >
+        <Button variant="primary" className="mt-8" onClick={handleCreateTodo}>
           Submit
         </Button>
       </div>
