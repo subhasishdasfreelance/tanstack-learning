@@ -1,5 +1,6 @@
 import {
   createTodo,
+  deleteTodo,
   getAllTodos,
   getTodosByBorough,
   toggleTodo,
@@ -40,3 +41,11 @@ export const updateTodoTextFn = createServerFn()
     }),
   )
   .handler(({ data }) => updateTodoText(data.id, data.text))
+
+export const deleteTodoFn = createServerFn()
+  .inputValidator(
+    v.object({
+      id: v.string(),
+    }),
+  )
+  .handler(({ data }) => deleteTodo(data.id))

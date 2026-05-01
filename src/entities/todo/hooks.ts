@@ -16,3 +16,6 @@ export const useToggleTodo = () => {
 export const useUpdateTodoText = () => {
   return useAppMutation(todoMutations.updateText())
 }
+export const useDeleteTodo = () => {
+  return useAppMutation(todoMutations.delete())
+}

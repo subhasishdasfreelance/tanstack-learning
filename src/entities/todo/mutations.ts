@@ -1,5 +1,6 @@
 import {
   createTodoFn,
+  deleteTodoFn,
   toggleTodoFn,
   updateTodoTextFn,
 } from '#/entities/todo/fns'
@@ -61,6 +62,7 @@ export const todoMutations = {
       onSuccess: invalidateQueries(keys.all),
       onError: rollbackToPrevious<ClientTodo[]>(keys.all),
     }),
+
   updateText: () =>
     mutationOptions({
       mutationFn: updateTodoTextFn,
@@ -72,6 +74,23 @@ export const todoMutations = {
           old.map((todo) =>
             todo.id === vars.data.id ? { ...todo, text: vars.data.text } : todo,
           ),
+        )
+
+        return base
+      },
+      onSuccess: invalidateQueries(keys.all),
+      onError: rollbackToPrevious<ClientTodo[]>(keys.all),
+    }),
+
+  delete: () =>
+    mutationOptions({
+      mutationFn: deleteTodoFn,
+      onMutate: async (vars, context) => {
+        const base = await onMutate<ClientTodo[]>(keys.all)(vars, context)
+
+        const qc = context.client
+        qc.setQueryData(keys.all, (old: ClientTodo[] = []) =>
+          old.filter((todo) => todo.id !== vars.data.id),
         )
 
         return base

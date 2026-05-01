@@ -76,3 +76,13 @@ export const updateTodoText = async (todoId: string, text: string) => {
     throw new Error('Todo not found')
   }
 }
+
+export const deleteTodo = async (todoId: string) => {
+  const res = await todoCollection.deleteOne({
+    _id: new ObjectId(todoId),
+  })
+
+  if (res.deletedCount === 0) {
+    throw new Error('Todo not found')
+  }
+}

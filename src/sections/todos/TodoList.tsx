@@ -1,4 +1,8 @@
-import { useToggleTodo, useUpdateTodoText } from '#/entities/todo/hooks'
+import {
+  useDeleteTodo,
+  useToggleTodo,
+  useUpdateTodoText,
+} from '#/entities/todo/hooks'
 import type { ClientTodo } from '#/entities/todo/schema'
 import useMultiState from '#/shared/lib/useMultiState'
 import Alert from '#/shared/ui/Alert'
@@ -16,6 +20,7 @@ type Props = { todos: ClientTodo[] }
 export default function TodoList({ todos }: Props) {
   const { mutate: toggleTodo } = useToggleTodo()
   const { mutate: updateTodoText } = useUpdateTodoText()
+  const { mutate: deleteTodo } = useDeleteTodo()
   const alertState = useOverlayState()
   const [st, setSt] = useMultiState(initialState)
 
@@ -73,17 +78,25 @@ export default function TodoList({ todos }: Props) {
             placeholder="Please edit the todo text"
             desc="Please edit"
           />
-
+        </Alert.Body>
+        <Alert.Footer>
+          <Button
+            variant="danger-soft"
+            onClick={() => {
+              deleteTodo({ id: st.editingId })
+            }}
+          >
+            Delete
+          </Button>
           <Button
             variant="primary"
-            className="mt-8"
             onClick={() => {
               updateTodoText({ id: st.editingId, text: st.editedText })
             }}
           >
             Update
           </Button>
-        </Alert.Body>
+        </Alert.Footer>
       </Alert>
     </div>
   )
