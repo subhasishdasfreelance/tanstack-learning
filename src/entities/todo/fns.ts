@@ -3,6 +3,7 @@ import {
   getAllTodos,
   getTodosByBorough,
   toggleTodo,
+  updateTodoText,
 } from '#/entities/todo/server'
 import { createServerFn } from '@tanstack/react-start'
 import * as v from 'valibot'
@@ -26,7 +27,16 @@ export const createTodoFn = createServerFn()
 export const toggleTodoFn = createServerFn()
   .inputValidator(
     v.object({
-      _id: v.pipe(v.string()),
+      id: v.string(),
     }),
   )
-  .handler(({ data }) => toggleTodo(data._id))
+  .handler(({ data }) => toggleTodo(data.id))
+
+export const updateTodoTextFn = createServerFn()
+  .inputValidator(
+    v.object({
+      id: v.string(),
+      text: v.string(),
+    }),
+  )
+  .handler(({ data }) => updateTodoText(data.id, data.text))

@@ -1,4 +1,4 @@
-import type { ObjectId } from "mongodb"
+import type { ObjectId } from 'mongodb'
 
 export interface Todo {
   _id: ObjectId
@@ -7,3 +7,5 @@ export interface Todo {
   createdAt: number
   updatedAt: number
 }
+
+export type ClientTodo = Omit<Todo, '_id'> & { id: string }

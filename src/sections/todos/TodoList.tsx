@@ -1,24 +1,51 @@
-import { useToggleTodo } from '#/entities/todo/hooks'
-import type { Todo } from '#/entities/todo/schema'
-import { Checkbox, Label } from '@heroui/react'
+import { useToggleTodo, useUpdateTodoText } from '#/entities/todo/hooks'
+import type { ClientTodo } from '#/entities/todo/schema'
+import useMultiState from '#/shared/lib/useMultiState'
+import Alert from '#/shared/ui/Alert'
+import FormInput from '#/shared/ui/FormInput'
+import { Button, Checkbox, Label, useOverlayState } from '@heroui/react'
+import { IoAlertCircleOutline } from 'react-icons/io5'
 
-type Props = { todos: (Omit<Todo, '_id'> & { _id: string })[] }
+const initialState = {
+  editingId: '',
+  editedText: '',
+}
+
+type Props = { todos: ClientTodo[] }
 
 export default function TodoList({ todos }: Props) {
-  const { toggleTodo } = useToggleTodo()
+  const { mutate: toggleTodo } = useToggleTodo()
+  const { mutate: updateTodoText } = useUpdateTodoText()
+  const alertState = useOverlayState()
+  const [st, setSt] = useMultiState(initialState)
 
   return (
     <div className="max-w-xs mx-auto border border-muted rounded-xl p-4 flex flex-col bg-background">
       <h2>List of Todos</h2>
-      <p className="subheader">Lists of your existing todos</p>
+      <p className="subheader mb-6">Lists of your existing todos</p>
 
       <div className="">
         {todos.map((item) => (
-          <div key={item._id} className="flex gap-2">
+          <div key={item.id} className="flex gap-2 mb-2">
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => {
+                alertState.open()
+                setSt({
+                  editedText:
+                    todos.find((todoItem) => todoItem.id === item.id)?.text ||
+                    '',
+                  editingId: item.id,
+                })
+              }}
+            >
+              Edit
+            </Button>
             <Checkbox
               id="todo item"
               isSelected={item.completed}
-              onChange={() => toggleTodo({ _id: item._id })}
+              onChange={() => toggleTodo({ id: item.id })}
             >
               <Checkbox.Control>
                 <Checkbox.Indicator />
@@ -30,6 +57,34 @@ export default function TodoList({ todos }: Props) {
           </div>
         ))}
       </div>
+
+      <Alert state={alertState}>
+        <Alert.Header
+          icon={<IoAlertCircleOutline size={30} className="text-blue-700" />}
+        >
+          Hello
+        </Alert.Header>
+        <Alert.Body>
+          <FormInput
+            name="text"
+            value={st.editedText}
+            setValue={(val) => setSt({ editedText: val })}
+            label="Edit todo text and click update"
+            placeholder="Please edit the todo text"
+            desc="Please edit"
+          />
+
+          <Button
+            variant="primary"
+            className="mt-8"
+            onClick={() => {
+              updateTodoText({ id: st.editingId, text: st.editedText })
+            }}
+          >
+            Update
+          </Button>
+        </Alert.Body>
+      </Alert>
     </div>
   )
 }

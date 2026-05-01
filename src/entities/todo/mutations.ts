@@ -1,47 +1,82 @@
-import { createTodoFn, toggleTodoFn } from '#/entities/todo/fns'
-import { keys } from '#/entities/todo/keys'
-import type { Todo } from '#/entities/todo/schema'
 import {
-  createInvalidateOnSettled,
+  createTodoFn,
+  toggleTodoFn,
+  updateTodoTextFn,
+} from '#/entities/todo/fns'
+import { keys } from '#/entities/todo/keys'
+import type { ClientTodo } from '#/entities/todo/schema'
+import {
+  invalidateQueries,
   onMutate,
-  createRollbackOnError,
+  pipe,
+  rollbackToPrevious,
+  swapTempId,
 } from '#/shared/lib/mutation.helper'
-import type { QueryClient } from '@tanstack/react-query'
 import { mutationOptions } from '@tanstack/react-query'
-
-export type CreateTodoInput = {
-  text: string
-}
-export type ToggleTodoInput = {
-  _id: string
-}
+import { nanoid } from 'nanoid'
 
 export const todoMutations = {
-  create: (createCallBack: (qc: QueryClient, data: CreateTodoInput) => void) =>
+  create: () =>
     mutationOptions({
       mutationFn: createTodoFn,
       onMutate: async (vars, context) => {
-        const base = await onMutate<Todo[]>(keys.all)(vars, context)
+        const base = await onMutate<ClientTodo[]>(keys.all)(vars, context)
 
-        createCallBack(context.client, vars.data)
+        const qc = context.client
+        qc.setQueryData(keys.all, (old: ClientTodo[] = []) => [
+          ...old,
+          {
+            ...vars.data,
+            id: `temp-${nanoid()}`,
+          },
+        ])
 
         return base
       },
-      onError: createRollbackOnError<Todo[]>(keys.all),
-      onSettled: createInvalidateOnSettled(keys.all),
+      onSuccess: pipe(
+        swapTempId<ClientTodo>(keys.all),
+        invalidateQueries(keys.all),
+      ),
+      onError: rollbackToPrevious<ClientTodo[]>(keys.all),
+      // onSettled: invalidateQueries(keys.all),
     }),
 
-  toggle: (toggleCallBack: (qc: QueryClient, data: ToggleTodoInput) => void) =>
+  toggle: () =>
     mutationOptions({
       mutationFn: toggleTodoFn,
       onMutate: async (vars, context) => {
-        const base = await onMutate<Todo[]>(keys.all)(vars, context)
+        const base = await onMutate<ClientTodo[]>(keys.all)(vars, context)
 
-        toggleCallBack(context.client, vars.data)
+        const qc = context.client
+        qc.setQueryData(keys.all, (old: ClientTodo[] = []) =>
+          old.map((todo) =>
+            todo.id === vars.data.id
+              ? { ...todo, completed: !todo.completed }
+              : todo,
+          ),
+        )
 
         return base
       },
-      onError: createRollbackOnError<Todo[]>(keys.all),
-      onSettled: createInvalidateOnSettled(keys.all),
+      onSuccess: invalidateQueries(keys.all),
+      onError: rollbackToPrevious<ClientTodo[]>(keys.all),
+    }),
+  updateText: () =>
+    mutationOptions({
+      mutationFn: updateTodoTextFn,
+      onMutate: async (vars, context) => {
+        const base = await onMutate<ClientTodo[]>(keys.all)(vars, context)
+
+        const qc = context.client
+        qc.setQueryData(keys.all, (old: ClientTodo[] = []) =>
+          old.map((todo) =>
+            todo.id === vars.data.id ? { ...todo, text: vars.data.text } : todo,
+          ),
+        )
+
+        return base
+      },
+      onSuccess: invalidateQueries(keys.all),
+      onError: rollbackToPrevious<ClientTodo[]>(keys.all),
     }),
 }

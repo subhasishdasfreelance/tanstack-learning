@@ -1,97 +1,63 @@
-import type { MutationFunctionContext, QueryKey } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+import type {
+  MutationFunctionContext,
+  QueryClient,
+  QueryKey,
+  UseMutationOptions,
+} from '@tanstack/react-query'
 
-type RollbackCtx<T> = {
-  previous?: T
-}
+export function handler<TData = unknown, TResult = unknown>(
+  fn: (ctx: {
+    data?: TData
+    error?: unknown
+    result?: TResult
+    client: QueryClient
+  }) => void,
+) {
+  return (...args: unknown[]) => {
+    let data, error, result, context
 
-export const createRollbackOnError =
-  <T>(queryKey: QueryKey) =>
-  (
-    _err: unknown,
-    _vars: unknown,
-    ctx: RollbackCtx<T> | undefined,
-    context: MutationFunctionContext,
-  ) => {
-    if (ctx?.previous) {
-      context.client.setQueryData(queryKey, ctx.previous)
+    if (args.length === 5) {
+      ;[data, error, , result, context] = args
+    } else {
+      ;[data, , result, context] = args
     }
-  }
 
-export const createInvalidateOnSettled =
-  (queryKey: QueryKey) =>
-  (
-    _data: unknown,
-    _err: unknown,
-    _vars: unknown,
-    _ctx: unknown,
-    context: MutationFunctionContext,
-  ) => {
-    context.client.invalidateQueries({ queryKey, exact: true })
-  }
-
-export const mutateWrapper = <
-  TVars extends { data: any },
-  TData,
-  TError,
->(mutation: {
-  mutate: (
-    vars: TVars,
-    opts?: {
-      onSuccess?: (data: TData) => void
-      onError?: (error: TError) => void
-    },
-  ) => void
-}) => {
-  return (
-    input: TVars['data'],
-    opts?: Parameters<typeof mutation.mutate>[1] & Partial<Omit<TVars, 'data'>>,
-  ) => {
-    const { onSuccess, onError, ...rest } = opts || {}
-
-    mutation.mutate(
-      {
-        data: input,
-        ...(rest as Omit<TVars, 'data'>),
-      } as TVars,
-      {
-        onSuccess,
-        onError,
-      },
-    )
+    fn({
+      data: data as TData,
+      error,
+      result: result as TResult,
+      client: (context as MutationFunctionContext).client,
+    })
   }
 }
 
-export const mutateWrapperAsync = <
-  TVars extends { data: any },
-  TData,
-  TError,
->(mutation: {
-  mutate: (
-    vars: TVars,
-    opts?: {
-      onSuccess?: (data: TData) => void
-      onError?: (error: TError) => void
-    },
-  ) => void
-}) => {
-  return (
-    input: TVars['data'],
-    opts?: Parameters<typeof mutation.mutate>[1] & Partial<Omit<TVars, 'data'>>,
-  ) => {
-    const { onSuccess, onError, ...rest } = opts || {}
-
-    mutation.mutate(
-      {
-        data: input,
-        ...(rest as Omit<TVars, 'data'>),
-      } as TVars,
-      {
-        onSuccess,
-        onError,
-      },
-    )
+export function pipe<T>(...fns: ((x: T) => void)[]) {
+  return (x: T) => {
+    for (const fn of fns) fn(x)
   }
 }
+
+export const invalidateQueries = (queryKey: QueryKey) =>
+  handler(({ client }) => {
+    client.invalidateQueries({ queryKey })
+  })
+
+export const rollbackToPrevious = <T>(queryKey: QueryKey) =>
+  handler<unknown, { previous?: T }>(({ result, client }) => {
+    if (result?.previous) {
+      client.setQueryData(queryKey, result.previous)
+    }
+  })
+
+export const swapTempId = <T extends { id: string }>(queryKey: QueryKey) =>
+  handler<T>(({ data, client }) => {
+    if (!data) return
+
+    client.setQueryData(queryKey, (old: T[] = []) =>
+      old.map((t) => (t.id.startsWith('temp-') ? data : t)),
+    )
+  })
 
 export const onMutate =
   <T>(queryKey: QueryKey) =>
@@ -104,3 +70,57 @@ export const onMutate =
 
     return { previous }
   }
+
+type VarsWithData<T> = { data: T }
+
+export function useAppMutation<
+  TData,
+  TError = unknown,
+  TInput = unknown,
+  TContext = unknown,
+>(options: UseMutationOptions<TData, TError, VarsWithData<TInput>, TContext>) {
+  const mutation = useMutation(options)
+
+  const mutate = (
+    input: TInput,
+    opts?: {
+      onSuccess?: (data: TData) => void
+      onError?: (err: TError) => void
+    },
+  ) => {
+    mutation.mutate(
+      { data: input },
+      {
+        onSuccess: (data) => {
+          opts?.onSuccess?.(data)
+        },
+        onError: (err) => {
+          opts?.onError?.(err)
+        },
+      },
+    )
+  }
+
+  const mutateAsync = async (
+    input: TInput,
+    opts?: {
+      onSuccess?: (data: TData) => void
+      onError?: (err: TError) => void
+    },
+  ) => {
+    try {
+      const res = await mutation.mutateAsync({ data: input })
+      opts?.onSuccess?.(res)
+      return res
+    } catch (err) {
+      opts?.onError?.(err as TError)
+      throw err
+    }
+  }
+
+  return {
+    ...mutation,
+    mutate,
+    mutateAsync,
+  }
+}

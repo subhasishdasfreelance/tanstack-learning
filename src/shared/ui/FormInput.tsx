@@ -10,7 +10,7 @@ type Props = {
   placeholder: string
 }
 
-export function FormInput({
+export default function FormInput({
   value,
   setValue,
   label,
@@ -26,12 +26,12 @@ export function FormInput({
         <TextArea
           placeholder={placeholder}
           rows={rows}
-          className="shadow-inner ring-1 ring-muted"
+          className="shadow-inner border-2 border-muted focus:border-focus focus:ring-0"
         />
       ) : (
         <Input
           placeholder={placeholder}
-          className="shadow-inner ring-1 ring-muted"
+          className="shadow-inner border-2 border-muted focus:border-focus focus:ring-0"
         />
       )}
       {desc && <Description>{desc}</Description>}

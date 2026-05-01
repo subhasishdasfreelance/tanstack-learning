@@ -1,7 +1,7 @@
 import { useCreateTodo } from '#/entities/todo/hooks'
 import { getErrorMessage } from '#/shared/lib/getErrorMessage'
 import useMultiState from '#/shared/lib/useMultiState'
-import { FormInput } from '#/shared/ui/TextField'
+import FormInput from '#/shared/ui/FormInput'
 import { Button, toast } from '@heroui/react'
 import { useNavigate } from '@tanstack/react-router'
 
@@ -11,7 +11,7 @@ const inititalState = {
 
 export default function CreateTodo() {
   const [st, setSt] = useMultiState(inititalState)
-  const { createTodo, status } = useCreateTodo()
+  const { status, mutate: createTodo } = useCreateTodo()
   const navigate = useNavigate()
 
   const handleCreateTodo = () => {
@@ -31,7 +31,9 @@ export default function CreateTodo() {
         text: st.text,
       },
       {
-        // onSuccess
+        onSuccess: (data) => {
+          console.log('success in createTodo', data)
+        },
         onError: (err) => {
           const errMsg = getErrorMessage(err)
           toast.danger(errMsg)
@@ -59,7 +61,7 @@ export default function CreateTodo() {
         />
 
         <Button variant="primary" className="mt-8" onClick={handleCreateTodo}>
-          Submit
+          Create
         </Button>
       </div>
     </div>

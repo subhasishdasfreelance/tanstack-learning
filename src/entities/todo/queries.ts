@@ -5,7 +5,7 @@ import { queryOptions } from '@tanstack/react-query'
 export const todoQueries = {
   list: () =>
     queryOptions({
-      queryKey: keys.all,
+      queryKey: keys.list(),
       queryFn: getAllTodosFn,
     }),
 }
