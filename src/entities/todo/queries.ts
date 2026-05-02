@@ -12,13 +12,16 @@ export const todoQueries = {
       queryFn: () => getAllTodosFn(),
     }),
 
-  listByStatus: (status: boolean, options?: SafeOptions<ClientTodo[]>) =>
+  listByStatus: (
+    vars: { status: boolean },
+    options?: SafeOptions<ClientTodo[]>,
+  ) =>
     queryOptions({
       ...options,
-      queryKey: keys.list({ status }),
+      queryKey: keys.list(),
       queryFn: () =>
         getTodosByStatusFn({
-          data: { status },
+          data: { status: vars.status },
         }),
     }),
 }
