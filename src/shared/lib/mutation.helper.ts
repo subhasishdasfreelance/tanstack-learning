@@ -1,10 +1,55 @@
-import { useMutation } from '@tanstack/react-query'
+import { getErrorMessage } from '#/shared/lib/getErrorMessage'
 import type {
   MutationFunctionContext,
   QueryClient,
   QueryKey,
   UseMutationOptions,
 } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
+
+type RollbackCtx<T> = {
+  previous?: T
+}
+
+export const rollbackToPrevious =
+  <T>(queryKey: QueryKey) =>
+  (
+    _err: unknown,
+    _vars: unknown,
+    ctx: RollbackCtx<T> | undefined,
+    context: MutationFunctionContext,
+  ) => {
+    if (ctx?.previous) {
+      context.client.setQueryData(queryKey, ctx.previous)
+    }
+  }
+
+export const invalidateQueriesAndSwapTempId =
+  <T extends { id: string }>(queryKey: QueryKey) =>
+  (
+    data: unknown,
+    _vars: unknown,
+    _ctx: unknown,
+    context: MutationFunctionContext,
+  ) => {
+    context.client.invalidateQueries({ queryKey })
+    if (!data) return
+
+    context.client.setQueryData(queryKey, (old: T[] = []) =>
+      old.map((t) => (t.id.startsWith('temp-') ? data : t)),
+    )
+  }
+
+export const invalidateQueries =
+  (queryKey: QueryKey) =>
+  (
+    _data: unknown,
+    _vars: unknown,
+    _ctx: unknown,
+    context: MutationFunctionContext,
+  ) => {
+    context.client.invalidateQueries({ queryKey })
+  }
 
 export function handler<TData = unknown, TResult = unknown>(
   fn: (ctx: {
@@ -38,12 +83,12 @@ export function pipe<T>(...fns: ((x: T) => void)[]) {
   }
 }
 
-export const invalidateQueries = (queryKey: QueryKey) =>
+export const invalidateQueries2 = (queryKey: QueryKey) =>
   handler(({ client }) => {
     client.invalidateQueries({ queryKey })
   })
 
-export const rollbackToPrevious = <T>(queryKey: QueryKey) =>
+export const rollbackToPrevious2 = <T>(queryKey: QueryKey) =>
   handler<unknown, { previous?: T }>(({ result, client }) => {
     if (result?.previous) {
       client.setQueryData(queryKey, result.previous)
@@ -85,7 +130,7 @@ export function useAppMutation<
     input: TInput,
     opts?: {
       onSuccess?: (data: TData) => void
-      onError?: (err: TError) => void
+      onError?: (err: string) => void
     },
   ) => {
     mutation.mutate(
@@ -95,7 +140,8 @@ export function useAppMutation<
           opts?.onSuccess?.(data)
         },
         onError: (err) => {
-          opts?.onError?.(err)
+          const errMsg = getErrorMessage(err)
+          opts?.onError?.(errMsg)
         },
       },
     )
@@ -105,7 +151,7 @@ export function useAppMutation<
     input: TInput,
     opts?: {
       onSuccess?: (data: TData) => void
-      onError?: (err: TError) => void
+      onError?: (err: string) => void
     },
   ) => {
     try {
@@ -113,7 +159,8 @@ export function useAppMutation<
       opts?.onSuccess?.(res)
       return res
     } catch (err) {
-      opts?.onError?.(err as TError)
+      const errMsg = getErrorMessage(err)
+      opts?.onError?.(errMsg)
       throw err
     }
   }

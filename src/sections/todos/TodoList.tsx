@@ -7,7 +7,7 @@ import type { ClientTodo } from '#/entities/todo/schema'
 import useMultiState from '#/shared/lib/useMultiState'
 import Alert from '#/shared/ui/Alert'
 import FormInput from '#/shared/ui/FormInput'
-import { Button, Checkbox, Label, useOverlayState } from '@heroui/react'
+import { Button, Checkbox, Label, toast, useOverlayState } from '@heroui/react'
 import { IoAlertCircleOutline } from 'react-icons/io5'
 
 const initialState = {
@@ -83,7 +83,19 @@ export default function TodoList({ todos }: Props) {
           <Button
             variant="danger-soft"
             onClick={() => {
-              deleteTodo({ id: st.editingId })
+              toast.success(`Todo successfully deleted`, {
+                description: `deleted "${st.editedText}"`,
+              })
+              deleteTodo(
+                { id: st.editingId },
+                {
+                  onError: () =>
+                    toast.success(`Todo successfully deleted`, {
+                      description: `deleted "${st.editedText}"`,
+                    }),
+                },
+              )
+              alertState.close()
             }}
           >
             Delete
@@ -92,6 +104,7 @@ export default function TodoList({ todos }: Props) {
             variant="primary"
             onClick={() => {
               updateTodoText({ id: st.editingId, text: st.editedText })
+              alertState.close()
             }}
           >
             Update

@@ -1,5 +1,4 @@
 import { useCreateTodo } from '#/entities/todo/hooks'
-import { getErrorMessage } from '#/shared/lib/getErrorMessage'
 import useMultiState from '#/shared/lib/useMultiState'
 import FormInput from '#/shared/ui/FormInput'
 import { Button, toast } from '@heroui/react'
@@ -35,8 +34,7 @@ export default function CreateTodo() {
           console.log('success in createTodo', data)
         },
         onError: (err) => {
-          const errMsg = getErrorMessage(err)
-          toast.danger(errMsg)
+          toast.danger(err)
         },
       },
     )

@@ -8,10 +8,9 @@ import { keys } from '#/entities/todo/keys'
 import type { ClientTodo } from '#/entities/todo/schema'
 import {
   invalidateQueries,
+  invalidateQueriesAndSwapTempId,
   onMutate,
-  pipe,
   rollbackToPrevious,
-  swapTempId,
 } from '#/shared/lib/mutation.helper'
 import { mutationOptions } from '@tanstack/react-query'
 import { nanoid } from 'nanoid'
@@ -34,10 +33,11 @@ export const todoMutations = {
 
         return base
       },
-      onSuccess: pipe(
-        swapTempId<ClientTodo>(keys.all),
-        invalidateQueries(keys.all),
-      ),
+      // onSuccess: pipe(
+      //   swapTempId<ClientTodo>(keys.all),
+      //   invalidateQueries(keys.all),
+      // ),
+      onSuccess: invalidateQueriesAndSwapTempId<ClientTodo>(keys.all),
       onError: rollbackToPrevious<ClientTodo[]>(keys.all),
       // onSettled: invalidateQueries(keys.all),
     }),
