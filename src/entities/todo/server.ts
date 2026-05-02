@@ -6,7 +6,8 @@ import type { OptionalId } from 'mongodb'
 const todoCollection = db.collection<OptionalId<Todo>>('todos')
 
 export const getAllTodos = async () => {
-  const todos = await todoCollection.find({}).limit(100).toArray()
+  // const todos = await todoCollection.find({}).limit(100).toArray()
+  const todos = await todoCollection.find({}).toArray()
 
   return todos.map((todo) => {
     const { _id, ...rest } = todo
@@ -16,13 +17,12 @@ export const getAllTodos = async () => {
   })
 }
 
-export const getTodosByBorough = async () => {
+export const getTodosByStatus = async (status: boolean) => {
   const todos = await todoCollection
     .find({
-      borough: 'Queens',
-      name: { $regex: 'Moon', $options: 'i' },
+      completed: status,
     })
-    .limit(100)
+    // .limit(100)
     .toArray()
 
   return todos.map((todo) => {
