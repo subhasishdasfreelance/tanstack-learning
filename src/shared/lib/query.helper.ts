@@ -1,6 +1,6 @@
-import type { UseQueryOptions } from "@tanstack/react-query";
+import type { UseQueryOptions } from '@tanstack/react-query'
 
-export type SafeOptions<T> = Omit<
-  UseQueryOptions<T>,
+export type SafeOptions<TData> = Omit<
+  UseQueryOptions<TData, unknown, TData, any>,
   'queryKey' | 'queryFn'
 >

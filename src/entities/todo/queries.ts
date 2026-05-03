@@ -18,7 +18,7 @@ export const todoQueries = {
   ) =>
     queryOptions({
       ...options,
-      queryKey: keys.list(),
+      queryKey: keys.list({ status: vars.status }),
       queryFn: () =>
         getTodosByStatusFn({
           data: { status: vars.status },
