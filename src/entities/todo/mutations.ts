@@ -33,10 +33,6 @@ export const todoMutations = {
 
         return base
       },
-      // onSuccess: pipe(
-      //   swapTempId<ClientTodo>(keys.all),
-      //   invalidateQueries(keys.all),
-      // ),
       onSuccess: invalidateQueriesAndSwapTempId<ClientTodo>(keys.all),
       onError: rollbackToPrevious<ClientTodo[]>(keys.all),
       // onSettled: invalidateQueries(keys.all),

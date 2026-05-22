@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 
 export const useTodos = () => {
   return useQuery(todoQueries.list())
+  // const { data } = useQuery(todoQueries.listByStatus({ status: true }, {staleTime: 500}))
 }
 
 export const useCreateTodo = () => {

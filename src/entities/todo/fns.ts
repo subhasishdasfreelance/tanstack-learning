@@ -2,7 +2,7 @@ import {
   createTodo,
   deleteTodo,
   getAllTodos,
-  getTodosByBorough,
+  getTodosByStatus,
   toggleTodo,
   updateTodoText,
 } from '#/entities/todo/server'
@@ -13,11 +13,17 @@ export const getAllTodosFn = createServerFn({ method: 'GET' }).handler(() =>
   getAllTodos(),
 )
 
-export const getTodosByBoroughFn = createServerFn({
+export const getTodosByStatusFn = createServerFn({
   method: 'GET',
-}).handler(() => getTodosByBorough())
+})
+  .inputValidator(
+    v.object({
+      status: v.boolean(),
+    }),
+  )
+  .handler(({ data }) => getTodosByStatus(data.status))
 
-export const createTodoFn = createServerFn()
+export const createTodoFn = createServerFn({ method: 'POST' })
   .inputValidator(
     v.object({
       text: v.pipe(v.string(), v.minLength(2, 'Minimum 2 chars please')),
@@ -25,7 +31,7 @@ export const createTodoFn = createServerFn()
   )
   .handler(({ data }) => createTodo(data.text))
 
-export const toggleTodoFn = createServerFn()
+export const toggleTodoFn = createServerFn({ method: 'POST' })
   .inputValidator(
     v.object({
       id: v.string(),
@@ -33,7 +39,7 @@ export const toggleTodoFn = createServerFn()
   )
   .handler(({ data }) => toggleTodo(data.id))
 
-export const updateTodoTextFn = createServerFn()
+export const updateTodoTextFn = createServerFn({ method: 'POST' })
   .inputValidator(
     v.object({
       id: v.string(),
@@ -42,7 +48,7 @@ export const updateTodoTextFn = createServerFn()
   )
   .handler(({ data }) => updateTodoText(data.id, data.text))
 
-export const deleteTodoFn = createServerFn()
+export const deleteTodoFn = createServerFn({ method: 'POST' })
   .inputValidator(
     v.object({
       id: v.string(),
