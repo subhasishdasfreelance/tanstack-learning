@@ -7,5 +7,6 @@
   },
   "files.readonlyInclude": {
     "**/routeTree.gen.ts": true
-  }
+  },
+  "a-file-icon-vscode.arrowTheme": "arrow"
 }

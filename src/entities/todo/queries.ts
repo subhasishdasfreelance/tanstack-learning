@@ -8,20 +8,20 @@ export const todoQueries = {
   list: (options?: SafeOptions<ClientTodo[]>) =>
     queryOptions({
       ...options,
-      queryKey: keys.list(),
+      queryKey: keys.lists(),
       queryFn: () => getAllTodosFn(),
     }),
 
-  listByStatus: (
-    vars: { status: boolean },
-    options?: SafeOptions<ClientTodo[]>,
-  ) =>
-    queryOptions({
-      ...options,
-      queryKey: keys.list({ status: vars.status }),
-      queryFn: () =>
-        getTodosByStatusFn({
-          data: { status: vars.status },
-        }),
-    }),
+  // listByStatus: (
+  //   vars: { status: boolean },
+  //   options?: SafeOptions<ClientTodo[]>,
+  // ) =>
+  //   queryOptions({
+  //     ...options,
+  //     queryKey: keys.lists(),
+  //     queryFn: () =>
+  //       getTodosByStatusFn({
+  //         data: { status: vars.status },
+  //       }),
+  //   }),
 }

@@ -1,10 +1,10 @@
 import { MongoClient } from 'mongodb'
 
-const client = new MongoClient(process.env.MONGO_CONN_STRING as string)
+export const mongoClient = new MongoClient(process.env.MONGO_CONN_STRING as string)
 
-export const db = client.db('todoapp')
+export const db = mongoClient.db('todoapp')
 
 export const connectDB = async () => {
-  await client.connect()
+  await mongoClient.connect()
   console.log('Mongo connected')
 }

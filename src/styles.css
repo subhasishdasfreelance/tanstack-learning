@@ -53,8 +53,8 @@
     --warning-foreground: oklch(21.03% 0.0059 73.6);
 
     /* Border Radius */
-    --radius: 0.25rem;
-    --field-radius: 0.25rem;
+    --radius: 0.125rem;
+    --field-radius: 0.5rem;
 
     /* Font Family */
     /* Make sure to load Public Sans font in your app */
@@ -100,16 +100,13 @@
 
 @layer base {
   h1 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight leading-tight;
-    color: var(--foreground);
+    @apply text-3xl md:text-4xl font-bold tracking-tight leading-tight text-(--foreground);
   }
   h2 {
-    @apply text-2xl md:text-3xl font-semibold tracking-tight leading-snug;
-    color: var(--foreground);
+    @apply text-2xl md:text-3xl font-semibold tracking-tight leading-snug text-(--foreground);
   }
   h3 {
-    @apply text-xl md:text-2xl font-semibold leading-snug;
-    color: var(--foreground);
+    @apply text-xl md:text-2xl font-semibold leading-snug text-(--foreground);
   }
   .subheader {
     @apply text-base md:text-lg;

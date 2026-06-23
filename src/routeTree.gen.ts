@@ -10,19 +10,47 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SunRouteImport } from './routes/sun'
+import { Route as PracticeRouteImport } from './routes/practice'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as PostsRouteRouteImport } from './routes/posts/route'
+import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TodosIndexRouteImport } from './routes/todos/index'
 import { Route as TodosNewRouteImport } from './routes/todos/new'
+import { Route as PostsPostIdIndexRouteImport } from './routes/posts/$postId/index'
+import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
+import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
+import { Route as PostsPostIdSplatRouteImport } from './routes/posts/$postId/$'
+import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
 
 const SunRoute = SunRouteImport.update({
   id: '/sun',
   path: '/sun',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PracticeRoute = PracticeRouteImport.update({
+  id: '/practice',
+  path: '/practice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AboutRoute = AboutRouteImport.update({
   id: '/about',
   path: '/about',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PostsRouteRoute = PostsRouteRouteImport.update({
+  id: '/posts',
+  path: '/posts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRouteRoute = AuthRouteRouteImport.update({
+  id: '/_auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -40,43 +68,139 @@ const TodosNewRoute = TodosNewRouteImport.update({
   path: '/todos/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PostsPostIdIndexRoute = PostsPostIdIndexRouteImport.update({
+  id: '/$postId/',
+  path: '/$postId/',
+  getParentRoute: () => PostsRouteRoute,
+} as any)
+const AuthSignupIndexRoute = AuthSignupIndexRouteImport.update({
+  id: '/signup/',
+  path: '/signup/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthLoginIndexRoute = AuthLoginIndexRouteImport.update({
+  id: '/login/',
+  path: '/login/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const PostsPostIdSplatRoute = PostsPostIdSplatRouteImport.update({
+  id: '/$postId/$',
+  path: '/$postId/$',
+  getParentRoute: () => PostsRouteRoute,
+} as any)
+const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
+  id: '/api/auth/$',
+  path: '/api/auth/$',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/posts': typeof PostsRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRoute
+  '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
   '/todos/new': typeof TodosNewRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/posts/$postId/$': typeof PostsPostIdSplatRoute
+  '/login/': typeof AuthLoginIndexRoute
+  '/signup/': typeof AuthSignupIndexRoute
+  '/posts/$postId/': typeof PostsPostIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/posts': typeof PostsRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRoute
+  '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
   '/todos/new': typeof TodosNewRoute
   '/todos': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/posts/$postId/$': typeof PostsPostIdSplatRoute
+  '/login': typeof AuthLoginIndexRoute
+  '/signup': typeof AuthSignupIndexRoute
+  '/posts/$postId': typeof PostsPostIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_auth': typeof AuthRouteRouteWithChildren
+  '/posts': typeof PostsRouteRouteWithChildren
   '/about': typeof AboutRoute
+  '/dashboard': typeof DashboardRoute
+  '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
   '/todos/new': typeof TodosNewRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/auth/$': typeof ApiAuthSplatRoute
+  '/posts/$postId/$': typeof PostsPostIdSplatRoute
+  '/_auth/login/': typeof AuthLoginIndexRoute
+  '/_auth/signup/': typeof AuthSignupIndexRoute
+  '/posts/$postId/': typeof PostsPostIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/sun' | '/todos/new' | '/todos/'
+  fullPaths:
+    | '/'
+    | '/posts'
+    | '/about'
+    | '/dashboard'
+    | '/practice'
+    | '/sun'
+    | '/todos/new'
+    | '/todos/'
+    | '/api/auth/$'
+    | '/posts/$postId/$'
+    | '/login/'
+    | '/signup/'
+    | '/posts/$postId/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/sun' | '/todos/new' | '/todos'
-  id: '__root__' | '/' | '/about' | '/sun' | '/todos/new' | '/todos/'
+  to:
+    | '/'
+    | '/posts'
+    | '/about'
+    | '/dashboard'
+    | '/practice'
+    | '/sun'
+    | '/todos/new'
+    | '/todos'
+    | '/api/auth/$'
+    | '/posts/$postId/$'
+    | '/login'
+    | '/signup'
+    | '/posts/$postId'
+  id:
+    | '__root__'
+    | '/'
+    | '/_auth'
+    | '/posts'
+    | '/about'
+    | '/dashboard'
+    | '/practice'
+    | '/sun'
+    | '/todos/new'
+    | '/todos/'
+    | '/api/auth/$'
+    | '/posts/$postId/$'
+    | '/_auth/login/'
+    | '/_auth/signup/'
+    | '/posts/$postId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRouteRoute: typeof AuthRouteRouteWithChildren
+  PostsRouteRoute: typeof PostsRouteRouteWithChildren
   AboutRoute: typeof AboutRoute
+  DashboardRoute: typeof DashboardRoute
+  PracticeRoute: typeof PracticeRoute
   SunRoute: typeof SunRoute
   TodosNewRoute: typeof TodosNewRoute
   TodosIndexRoute: typeof TodosIndexRoute
+  ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -88,11 +212,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SunRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/practice': {
+      id: '/practice'
+      path: '/practice'
+      fullPath: '/practice'
+      preLoaderRoute: typeof PracticeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/about': {
       id: '/about'
       path: '/about'
       fullPath: '/about'
       preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/posts': {
+      id: '/posts'
+      path: '/posts'
+      fullPath: '/posts'
+      preLoaderRoute: typeof PostsRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_auth': {
+      id: '/_auth'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -116,15 +268,83 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/posts/$postId/': {
+      id: '/posts/$postId/'
+      path: '/$postId'
+      fullPath: '/posts/$postId/'
+      preLoaderRoute: typeof PostsPostIdIndexRouteImport
+      parentRoute: typeof PostsRouteRoute
+    }
+    '/_auth/signup/': {
+      id: '/_auth/signup/'
+      path: '/signup'
+      fullPath: '/signup/'
+      preLoaderRoute: typeof AuthSignupIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/login/': {
+      id: '/_auth/login/'
+      path: '/login'
+      fullPath: '/login/'
+      preLoaderRoute: typeof AuthLoginIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/posts/$postId/$': {
+      id: '/posts/$postId/$'
+      path: '/$postId/$'
+      fullPath: '/posts/$postId/$'
+      preLoaderRoute: typeof PostsPostIdSplatRouteImport
+      parentRoute: typeof PostsRouteRoute
+    }
+    '/api/auth/$': {
+      id: '/api/auth/$'
+      path: '/api/auth/$'
+      fullPath: '/api/auth/$'
+      preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
+interface AuthRouteRouteChildren {
+  AuthLoginIndexRoute: typeof AuthLoginIndexRoute
+  AuthSignupIndexRoute: typeof AuthSignupIndexRoute
+}
+
+const AuthRouteRouteChildren: AuthRouteRouteChildren = {
+  AuthLoginIndexRoute: AuthLoginIndexRoute,
+  AuthSignupIndexRoute: AuthSignupIndexRoute,
+}
+
+const AuthRouteRouteWithChildren = AuthRouteRoute._addFileChildren(
+  AuthRouteRouteChildren,
+)
+
+interface PostsRouteRouteChildren {
+  PostsPostIdSplatRoute: typeof PostsPostIdSplatRoute
+  PostsPostIdIndexRoute: typeof PostsPostIdIndexRoute
+}
+
+const PostsRouteRouteChildren: PostsRouteRouteChildren = {
+  PostsPostIdSplatRoute: PostsPostIdSplatRoute,
+  PostsPostIdIndexRoute: PostsPostIdIndexRoute,
+}
+
+const PostsRouteRouteWithChildren = PostsRouteRoute._addFileChildren(
+  PostsRouteRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRouteRoute: AuthRouteRouteWithChildren,
+  PostsRouteRoute: PostsRouteRouteWithChildren,
   AboutRoute: AboutRoute,
+  DashboardRoute: DashboardRoute,
+  PracticeRoute: PracticeRoute,
   SunRoute: SunRoute,
   TodosNewRoute: TodosNewRoute,
   TodosIndexRoute: TodosIndexRoute,
+  ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

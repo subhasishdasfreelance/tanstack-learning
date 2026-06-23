@@ -2,7 +2,7 @@
 import { useTodos } from '#/entities/todo/hooks'
 import { todoQueries } from '#/entities/todo/queries'
 import { Button } from '@heroui/react'
-import { createFileRoute, Link } from '@tanstack/react-router'
+import { Link, createFileRoute } from '@tanstack/react-router'
 
 export const Route = createFileRoute('/sun')({
   loader: async ({ context }) => {
@@ -31,7 +31,7 @@ function UsersPage() {
       ))} */}
       <p>---------client hook todos-----------</p>
       {data?.map((item) => (
-        <p key={item._id}>{item.text}</p>
+        <p key={item.id}>{item.text}</p>
       ))}
     </div>
   )
