@@ -18,11 +18,16 @@ import { Route as AuthRouteRouteImport } from './routes/_auth/route'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as TodosIndexRouteImport } from './routes/todos/index'
 import { Route as TodosNewRouteImport } from './routes/todos/new'
+import { Route as AiSdkStructuredDataStreamRouteImport } from './routes/ai-sdk/structured-data-stream'
+import { Route as AiSdkMsgRouteImport } from './routes/ai-sdk/msg'
 import { Route as PostsPostIdIndexRouteImport } from './routes/posts/$postId/index'
 import { Route as AuthSignupIndexRouteImport } from './routes/_auth/signup/index'
 import { Route as AuthLoginIndexRouteImport } from './routes/_auth/login/index'
 import { Route as PostsPostIdSplatRouteImport } from './routes/posts/$postId/$'
 import { Route as ApiAuthSplatRouteImport } from './routes/api/auth/$'
+import { Route as ApiAiSdkStructuredRouteImport } from './routes/api/ai-sdk/structured'
+import { Route as ApiAiSdkSentimentRouteImport } from './routes/api/ai-sdk/sentiment'
+import { Route as ApiAiSdkChatRouteImport } from './routes/api/ai-sdk/chat'
 
 const SunRoute = SunRouteImport.update({
   id: '/sun',
@@ -68,6 +73,17 @@ const TodosNewRoute = TodosNewRouteImport.update({
   path: '/todos/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AiSdkStructuredDataStreamRoute =
+  AiSdkStructuredDataStreamRouteImport.update({
+    id: '/ai-sdk/structured-data-stream',
+    path: '/ai-sdk/structured-data-stream',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const AiSdkMsgRoute = AiSdkMsgRouteImport.update({
+  id: '/ai-sdk/msg',
+  path: '/ai-sdk/msg',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PostsPostIdIndexRoute = PostsPostIdIndexRouteImport.update({
   id: '/$postId/',
   path: '/$postId/',
@@ -93,6 +109,21 @@ const ApiAuthSplatRoute = ApiAuthSplatRouteImport.update({
   path: '/api/auth/$',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiAiSdkStructuredRoute = ApiAiSdkStructuredRouteImport.update({
+  id: '/api/ai-sdk/structured',
+  path: '/api/ai-sdk/structured',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiSdkSentimentRoute = ApiAiSdkSentimentRouteImport.update({
+  id: '/api/ai-sdk/sentiment',
+  path: '/api/ai-sdk/sentiment',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAiSdkChatRoute = ApiAiSdkChatRouteImport.update({
+  id: '/api/ai-sdk/chat',
+  path: '/api/ai-sdk/chat',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -101,8 +132,13 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof DashboardRoute
   '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
+  '/ai-sdk/msg': typeof AiSdkMsgRoute
+  '/ai-sdk/structured-data-stream': typeof AiSdkStructuredDataStreamRoute
   '/todos/new': typeof TodosNewRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/ai-sdk/chat': typeof ApiAiSdkChatRoute
+  '/api/ai-sdk/sentiment': typeof ApiAiSdkSentimentRoute
+  '/api/ai-sdk/structured': typeof ApiAiSdkStructuredRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/posts/$postId/$': typeof PostsPostIdSplatRoute
   '/login/': typeof AuthLoginIndexRoute
@@ -116,8 +152,13 @@ export interface FileRoutesByTo {
   '/dashboard': typeof DashboardRoute
   '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
+  '/ai-sdk/msg': typeof AiSdkMsgRoute
+  '/ai-sdk/structured-data-stream': typeof AiSdkStructuredDataStreamRoute
   '/todos/new': typeof TodosNewRoute
   '/todos': typeof TodosIndexRoute
+  '/api/ai-sdk/chat': typeof ApiAiSdkChatRoute
+  '/api/ai-sdk/sentiment': typeof ApiAiSdkSentimentRoute
+  '/api/ai-sdk/structured': typeof ApiAiSdkStructuredRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/posts/$postId/$': typeof PostsPostIdSplatRoute
   '/login': typeof AuthLoginIndexRoute
@@ -133,8 +174,13 @@ export interface FileRoutesById {
   '/dashboard': typeof DashboardRoute
   '/practice': typeof PracticeRoute
   '/sun': typeof SunRoute
+  '/ai-sdk/msg': typeof AiSdkMsgRoute
+  '/ai-sdk/structured-data-stream': typeof AiSdkStructuredDataStreamRoute
   '/todos/new': typeof TodosNewRoute
   '/todos/': typeof TodosIndexRoute
+  '/api/ai-sdk/chat': typeof ApiAiSdkChatRoute
+  '/api/ai-sdk/sentiment': typeof ApiAiSdkSentimentRoute
+  '/api/ai-sdk/structured': typeof ApiAiSdkStructuredRoute
   '/api/auth/$': typeof ApiAuthSplatRoute
   '/posts/$postId/$': typeof PostsPostIdSplatRoute
   '/_auth/login/': typeof AuthLoginIndexRoute
@@ -150,8 +196,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/practice'
     | '/sun'
+    | '/ai-sdk/msg'
+    | '/ai-sdk/structured-data-stream'
     | '/todos/new'
     | '/todos/'
+    | '/api/ai-sdk/chat'
+    | '/api/ai-sdk/sentiment'
+    | '/api/ai-sdk/structured'
     | '/api/auth/$'
     | '/posts/$postId/$'
     | '/login/'
@@ -165,8 +216,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/practice'
     | '/sun'
+    | '/ai-sdk/msg'
+    | '/ai-sdk/structured-data-stream'
     | '/todos/new'
     | '/todos'
+    | '/api/ai-sdk/chat'
+    | '/api/ai-sdk/sentiment'
+    | '/api/ai-sdk/structured'
     | '/api/auth/$'
     | '/posts/$postId/$'
     | '/login'
@@ -181,8 +237,13 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/practice'
     | '/sun'
+    | '/ai-sdk/msg'
+    | '/ai-sdk/structured-data-stream'
     | '/todos/new'
     | '/todos/'
+    | '/api/ai-sdk/chat'
+    | '/api/ai-sdk/sentiment'
+    | '/api/ai-sdk/structured'
     | '/api/auth/$'
     | '/posts/$postId/$'
     | '/_auth/login/'
@@ -198,8 +259,13 @@ export interface RootRouteChildren {
   DashboardRoute: typeof DashboardRoute
   PracticeRoute: typeof PracticeRoute
   SunRoute: typeof SunRoute
+  AiSdkMsgRoute: typeof AiSdkMsgRoute
+  AiSdkStructuredDataStreamRoute: typeof AiSdkStructuredDataStreamRoute
   TodosNewRoute: typeof TodosNewRoute
   TodosIndexRoute: typeof TodosIndexRoute
+  ApiAiSdkChatRoute: typeof ApiAiSdkChatRoute
+  ApiAiSdkSentimentRoute: typeof ApiAiSdkSentimentRoute
+  ApiAiSdkStructuredRoute: typeof ApiAiSdkStructuredRoute
   ApiAuthSplatRoute: typeof ApiAuthSplatRoute
 }
 
@@ -268,6 +334,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TodosNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ai-sdk/structured-data-stream': {
+      id: '/ai-sdk/structured-data-stream'
+      path: '/ai-sdk/structured-data-stream'
+      fullPath: '/ai-sdk/structured-data-stream'
+      preLoaderRoute: typeof AiSdkStructuredDataStreamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/ai-sdk/msg': {
+      id: '/ai-sdk/msg'
+      path: '/ai-sdk/msg'
+      fullPath: '/ai-sdk/msg'
+      preLoaderRoute: typeof AiSdkMsgRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/posts/$postId/': {
       id: '/posts/$postId/'
       path: '/$postId'
@@ -301,6 +381,27 @@ declare module '@tanstack/react-router' {
       path: '/api/auth/$'
       fullPath: '/api/auth/$'
       preLoaderRoute: typeof ApiAuthSplatRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-sdk/structured': {
+      id: '/api/ai-sdk/structured'
+      path: '/api/ai-sdk/structured'
+      fullPath: '/api/ai-sdk/structured'
+      preLoaderRoute: typeof ApiAiSdkStructuredRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-sdk/sentiment': {
+      id: '/api/ai-sdk/sentiment'
+      path: '/api/ai-sdk/sentiment'
+      fullPath: '/api/ai-sdk/sentiment'
+      preLoaderRoute: typeof ApiAiSdkSentimentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/ai-sdk/chat': {
+      id: '/api/ai-sdk/chat'
+      path: '/api/ai-sdk/chat'
+      fullPath: '/api/ai-sdk/chat'
+      preLoaderRoute: typeof ApiAiSdkChatRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -342,8 +443,13 @@ const rootRouteChildren: RootRouteChildren = {
   DashboardRoute: DashboardRoute,
   PracticeRoute: PracticeRoute,
   SunRoute: SunRoute,
+  AiSdkMsgRoute: AiSdkMsgRoute,
+  AiSdkStructuredDataStreamRoute: AiSdkStructuredDataStreamRoute,
   TodosNewRoute: TodosNewRoute,
   TodosIndexRoute: TodosIndexRoute,
+  ApiAiSdkChatRoute: ApiAiSdkChatRoute,
+  ApiAiSdkSentimentRoute: ApiAiSdkSentimentRoute,
+  ApiAiSdkStructuredRoute: ApiAiSdkStructuredRoute,
   ApiAuthSplatRoute: ApiAuthSplatRoute,
 }
 export const routeTree = rootRouteImport
