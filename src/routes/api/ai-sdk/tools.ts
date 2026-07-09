@@ -1,21 +1,24 @@
-// The same is valid for multi-modal file processing too
-
+import { tools } from '#/shared/aiSdk/tools'
 import { createFileRoute } from '@tanstack/react-router'
-import type { UIMessage } from 'ai'
+import type { InferUITools, UIDataTypes, UIMessage } from 'ai'
 import {
   convertToModelMessages,
   createUIMessageStreamResponse,
+  stepCountIs,
   streamText,
   toUIMessageStream,
 } from 'ai'
 import { ollama } from 'ai-sdk-ollama'
 
-export const Route = createFileRoute('/api/ai-sdk/chat')({
+export type ChatTools = InferUITools<typeof tools>
+export type ChatMessage = UIMessage<never, UIDataTypes, ChatTools>
+
+export const Route = createFileRoute('/api/ai-sdk/tools')({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { messages }: { messages: UIMessage[] } = await request.json()
+          const { messages }: { messages: ChatMessage[] } = await request.json()
 
           const result = streamText({
             model: ollama('hoangquan456/qwen3-nothink:4b'),
@@ -27,10 +30,8 @@ export const Route = createFileRoute('/api/ai-sdk/chat')({
                 think: false,
               },
             },
-          })
-
-          result.usage.then((usage) => {
-            console.log('usage', usage)
+            tools,
+            stopWhen: stepCountIs(2),
           })
 
           return createUIMessageStreamResponse({
