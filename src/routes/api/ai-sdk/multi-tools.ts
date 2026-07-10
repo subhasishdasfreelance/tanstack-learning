@@ -35,7 +35,10 @@ export const Route = createFileRoute('/api/ai-sdk/multi-tools')({
           })
 
           return createUIMessageStreamResponse({
-            stream: toUIMessageStream({ stream: result.stream }),
+            stream: toUIMessageStream({
+              stream: result.stream,
+              sendSources: true,
+            }),
           })
         } catch (err) {
           console.log('err', err)

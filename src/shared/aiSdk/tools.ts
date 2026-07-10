@@ -90,6 +90,7 @@ const addTool = tool({
   },
 })
 
+// Put this the api handler instead. Create a tools object here importing only the tools you need, then export the ChatMessage type
 export const tools = {
   weather: weatherTool,
   time: timeTool,
